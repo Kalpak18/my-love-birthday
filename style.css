@@ -125,14 +125,15 @@ body {
 /* 📱 MOBILE TUNING */
 @media (max-width: 600px) {
   #poster {
-    width: 70%;          /* bigger on phone */
+    width: 80%;          /* bigger on phone */
     max-width: none;
-    top: 10%;            /* slightly higher */
+    top: 15%;            /* slightly higher */
   }
 }
 
 @media (max-width: 600px) {
   #flame {
-    left: 49%;           /* slight correction */
+    left: 49%;  
+    top: 63%;         /* slight correction */
   }
 }
