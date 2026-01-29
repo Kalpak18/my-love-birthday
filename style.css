@@ -134,6 +134,6 @@ body {
 @media (max-width: 600px) {
   #flame {
     left: 49%;  
-    top: 63%;         /* slight correction */
+    top: 55%;         /* slight correction */
   }
 }
