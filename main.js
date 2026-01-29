@@ -1,6 +1,7 @@
 const start = document.getElementById("start");
 const scene = document.getElementById("scene");
 const flame = document.getElementById("flame");
+const poster = document.getElementById("poster");
 const message = document.getElementById("message");
 const canvas = document.getElementById("effects");
 const ctx = canvas.getContext("2d");
@@ -11,7 +12,7 @@ const music = new Audio("assets/sounds/music.mp3");
 music.loop = true;
 music.volume = 0.6;
 
-// 📐 CANVAS RESIZE (ONLY ONE SOURCE)
+// 📐 CANVAS SIZE
 function resizeCanvas() {
   const rect = artboard.getBoundingClientRect();
   canvas.width = rect.width;
@@ -28,7 +29,7 @@ start.onclick = () => {
   startMic();
 };
 
-// 🎤 MIC + FLAME
+// 🎤 MIC + CANDLE
 function startMic() {
   navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
     const audio = new AudioContext();
@@ -51,6 +52,7 @@ function startMic() {
         if (flame.style.opacity <= 0) {
           active = false;
           flame.remove();
+          showPoster();
           createPetals();
           showMessage();
           return;
@@ -62,7 +64,13 @@ function startMic() {
   });
 }
 
-// 🌸 PETALS (RELATIVE TO IMAGE)
+// 🖼️ SHOW POSTER
+function showPoster() {
+  poster.style.opacity = 1;
+  poster.style.transform = "translateX(-50%) scale(1)";
+}
+
+// 🌸 PETALS
 let petals = [];
 
 function createPetals() {
@@ -97,15 +105,13 @@ function animatePetals() {
   }
 }
 
-// 💖 MESSAGE
+// 💖 BOTTOM MESSAGE
 function showMessage() {
   message.innerHTML = `
-    <div>
-      🎉 HAPPY BIRTHDAY 🎉<br>
-      <strong>MY LOVE ❤️</strong><br>
-      <small>29 JAN</small>
-    </div>
+    To my favorite person in the world ❤️  
+    Thank you for filling my life with warmth, laughter,  
+    and moments that feel like magic.
   `;
   message.style.opacity = 1;
-  message.style.transform = "scale(1)";
+  message.style.transform = "translateX(-50%) translateY(0)";
 }
