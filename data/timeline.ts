@@ -1,0 +1,121 @@
+export type SceneType = {
+    
+  id: string
+  image: string
+  thought: string
+
+  crop?: "crop-top" | "crop-center" | "crop-bottom" | "crop-left" | "crop-right"
+
+  /* THOUGHT POSITION */
+  thoughtX?: string
+  thoughtY?: string
+  thoughtWidth?: string
+  thoughtPadding: string | undefined
+   thoughtAlign?: "left" | "center" | "right"
+  thoughtRotate?: number
+
+  /* THOUGHT TIMING */
+   thoughtDelay?: number   // seconds
+  thoughtDuration?: number // seconds
+  thoughtIn?: number   // 0 → 1
+  thoughtOut?: number  // 0 → 1
+}
+
+export const timeline: SceneType[] = [
+  {
+    id: "intro",
+    image: "/scenes/intro.png",
+    thought: "Its For You My Love ",
+     crop: "crop-center",
+    thoughtX: "50%",
+    thoughtY: "72%",
+    thoughtWidth: "80%",
+    thoughtPadding: "1.25rem 1.5rem",
+  },
+  {
+    id: "us",
+    image: "/scenes/us.png",
+    thought: "The Neighbors Who Found Each Other",
+    crop: "crop-center",
+    thoughtX: "50%",
+    thoughtY: "72%",
+    thoughtWidth: "50%",
+    thoughtPadding: "1.25rem 1.5rem",
+    thoughtAlign: "right",
+  thoughtRotate: 1.4,
+  },
+  {
+    id: "same-building",
+    image: "/scenes/same_building.png",
+    thought: "Three years ago, we were just names on a directory, breaths in the same corridor, souls living under the same roof but worlds apart.",
+    crop: "crop-center",
+    thoughtX: "60%",
+    thoughtY: "52%",
+    thoughtWidth: "30%",
+    thoughtPadding: "1.25rem 1.5rem",
+  },
+   {
+    id: "teres_meet_1",
+    image: "/scenes/teres_meet_1.png",
+    thought: "Two strangers under one roof, breathing parallel lives until the universe decided it was time for our paths to cross.",
+    crop: "crop-center",
+    thoughtX: "5%",
+    thoughtY: "78%",
+    thoughtWidth: "30%",
+    thoughtPadding: "1.25rem 1.5rem",
+    thoughtAlign: "left",
+  thoughtRotate: -1.2,
+  },
+  {
+    id: "numbers_exchange",
+    image: "/scenes/number_exchange.png",
+    thought: "We met on the building terrace. In that quiet, private space, I finally asked for your number. We exchanged contact info—the moment our silent lives finally became a shared conversation.",
+    crop: "crop-center",
+    thoughtX: "5%",
+    thoughtY: "72%",
+    thoughtWidth: "30%",
+    thoughtPadding: "1.25rem 1.5rem",
+    thoughtAlign: "left",
+    thoughtRotate: -1.7,
+  },
+   {
+    id: "first_trip_seat",
+    image: "/scenes/trip_fix_seat.png",
+    thought: "The first time we sat together in a car, I knew I was falling.",
+    crop: "crop-center",
+    thoughtX: "5%",
+    thoughtY: "78%",
+    thoughtWidth: "30%",
+    thoughtPadding: "1.25rem 1.5rem",
+  },
+   {
+    id: "family_functions",
+    image: "/scenes/family_functions.png",
+    thought: "Even during family functions, we never spoke or looked at each other. We were nothing to each other back then, just background characters in each other's lives.",
+    crop: "crop-center",
+    thoughtX: "10%",
+    thoughtY: "78%",
+    thoughtWidth: "30%",
+    thoughtPadding: "1.25rem 1.5rem",
+  },
+  {
+    id: "family-trips",
+    image: "/scenes/family-trips.webp",
+    thought: "I didn’t know these moments were building me.",
+    crop: "crop-bottom",
+    thoughtX: "50%",
+    thoughtY: "70%",
+    thoughtWidth: "75%",
+    thoughtPadding: "undefined",
+  },
+  {
+    id: "today",
+    image: "/scenes/today.webp",
+    thought: "I’m still walking.",
+    crop: "crop-center",
+    thoughtX: "center",
+    thoughtY: "68%",
+    thoughtWidth: "70%",
+    thoughtPadding: "undefined",
+  },
+]
