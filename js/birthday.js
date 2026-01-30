@@ -1,1 +1,0 @@
-setTimeout(()=>document.getElementById('poster').style.opacity=1,1000);setTimeout(()=>document.getElementById('gift').style.opacity=1,4000);
