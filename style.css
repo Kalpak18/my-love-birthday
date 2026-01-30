@@ -110,6 +110,92 @@ body {
   transition: all 1.2s ease;
   z-index: 20;
 }
+#gift {
+  position: fixed;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);
+  width: 120px;
+  opacity: 0;
+  cursor: pointer;
+  transition: all 1s ease;
+  z-index: 30;
+}
+
+#gift.show {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+#timeline {
+  background: #f8fbfa;
+  padding: 80px 5vw;
+}
+
+#timeline.hidden {
+  display: none;
+}
+.timeline-block {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  margin-bottom: 80px;
+}
+
+.timeline-block.left {
+  flex-direction: row;
+}
+
+.timeline-block.right {
+  flex-direction: row-reverse;
+}
+
+.timeline-block img {
+  width: 45%;
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+.timeline-block img {
+  transition: transform 0.6s ease;
+}
+
+.timeline-block.show img {
+  transform: scale(1.03);
+}
+
+
+.timeline-block .text {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  border-left: 4px solid rgba(120,160,140,0.4);
+  padding-left: 24px;
+  max-width: 420px;
+}
+
+.timeline-block h2 {
+  font-family: cursive;
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.timeline-block h4 {
+  color: #5c7c6e;
+  margin-bottom: 12px;
+}
+
+.timeline-block p {
+  line-height: 1.6;
+  color: #444;
+}
+
+.location {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  color: #777;
+}
+
 
 /* DESKTOP POLISH */
 @media (min-width: 768px) {
@@ -122,6 +208,57 @@ body {
     width: 35%;
   }
 }
+@media (max-width: 768px) {
+  .timeline-block {
+    flex-direction: column !important;
+    text-align: center;
+  }
+
+  .timeline-block img {
+    width: 100%;
+  }
+}
+/* ================================
+   SCROLL ANIMATIONS
+================================ */
+
+.timeline-block {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: all 0.9s ease-out;
+}
+
+.timeline-block.left {
+  transform: translateX(-80px);
+}
+
+.timeline-block.right {
+  transform: translateX(80px);
+}
+
+.timeline-block.show {
+  opacity: 1;
+  transform: translateX(0) translateY(0);
+}
+@keyframes sway {
+  0% { transform: translateX(-50%) rotate(-1deg); }
+  50% { transform: translateX(-50%) rotate(1deg); }
+  100% { transform: translateX(-50%) rotate(-1deg); }
+}
+
+#poster.show {
+  animation: sway 6s ease-in-out infinite;
+}
+
+
+/* Mobile: simpler vertical animation */
+@media (max-width: 768px) {
+  .timeline-block.left,
+  .timeline-block.right {
+    transform: translateY(50px);
+  }
+}
+
 /* 📱 MOBILE TUNING */
 @media (max-width: 600px) {
   #poster {

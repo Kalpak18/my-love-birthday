@@ -26,8 +26,25 @@ start.onclick = () => {
   start.style.display = "none";
   scene.classList.remove("hidden");
   music.play();
-  startMic();
+
+  if (isBirthdayToday()) {
+    startMic(); // 🎂 full celebration
+  } else {
+    // 📖 Directly show story (no birthday effects)
+    setTimeout(() => {
+      timeline.classList.remove("hidden");
+      timeline.scrollIntoView({ behavior: "smooth" });
+    }, 800);
+  }
 };
+// 🎂 CHECK BIRTHDAY
+function isBirthdayToday() {
+  const today = new Date();
+  const day = today.getDate();
+  const month = today.getMonth(); // Jan = 0
+
+  return day === 29 && month === 0;
+}
 
 // 🎤 MIC + CANDLE
 function startMic() {
@@ -55,6 +72,8 @@ function startMic() {
           showPoster();
           createPetals();
           showMessage();
+          afterCelebration();
+
           return;
         }
       }
@@ -66,6 +85,7 @@ function startMic() {
 
 // 🖼️ SHOW POSTER
 function showPoster() {
+  poster.classList.add("show");
   poster.style.opacity = 1;
   poster.style.transform = "translateX(-50%) scale(1)";
 }
@@ -115,3 +135,41 @@ function showMessage() {
   message.style.opacity = 1;
   message.style.transform = "translateX(-50%) translateY(0)";
 }
+const gift = document.getElementById("gift");
+const timeline = document.getElementById("timeline");
+
+// After candle blow (inside startMic success)
+function afterCelebration() {
+  setTimeout(() => {
+    gift.classList.add("show");
+  }, 3000);
+}
+
+// Gift click
+gift.onclick = () => {
+  gift.src = "assets/images/gift-open.png";
+
+  setTimeout(() => {
+    timeline.classList.remove("hidden");
+    timeline.scrollIntoView({ behavior: "smooth" });
+    gift.style.display = "none";
+  }, 800);
+};
+// 📜 SCROLL ANIMATION (TIMELINE)
+const blocks = document.querySelectorAll(".timeline-block");
+
+const observer = new IntersectionObserver(
+  entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("show");
+        observer.unobserve(entry.target); // animate once
+      }
+    });
+  },
+  {
+    threshold: 0.10
+  }
+);
+
+blocks.forEach(block => observer.observe(block));
