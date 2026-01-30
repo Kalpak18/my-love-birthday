@@ -67,7 +67,7 @@ export const timeline: SceneType[] = [
   thoughtRotate: -1.2,
   },
   {
-    id: "numbers_exchange",
+    id: "number_exchange",
     image: "/scenes/number_exchange.png",
     thought: "We met on the building terrace. In that quiet, private space, I finally asked for your number. We exchanged contact info—the moment our silent lives finally became a shared conversation.",
     crop: "crop-center",
