@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import Scene from "./Scene"
 import { timeline } from "@/data/timeline"
 
@@ -8,96 +8,83 @@ export default function SceneEngine() {
   const [index, setIndex] = useState(0)
   const [prevIndex, setPrevIndex] = useState<number | null>(null)
 
-  // shared lock
-  const gestureLocked = useRef(false)
+  // gesture state
+  const gestureActive = useRef(false)
+  const wheelTimeout = useRef<number | null>(null)
+  const wheelAccum = useRef(0)
 
-  // wheel gesture (desktop)
-  const wheelDelta = useRef(0)
-  const wheelStopTimer = useRef<number | null>(null)
+  // thresholds (IMPORTANT)
+  const INTENT_THRESHOLD = 40 // prevents noise-trigger
+  const GESTURE_END_DELAY = 180
 
-  // touch gesture (mobile)
+  // touch
   const touchStartY = useRef(0)
-  const touchEndY = useRef(0)
 
-  const INTENT_THRESHOLD = 18
-  const TOUCH_THRESHOLD = 50 // px swipe
+  const changeScene = (direction: 1 | -1) => {
+    const next = index + direction
+    if (next < 0 || next >= timeline.length) return
+
+    setPrevIndex(index)
+    setIndex(next)
+  }
 
   useEffect(() => {
-    const unlock = () => {
-      gestureLocked.current = false
-      wheelDelta.current = 0
-    }
-
     // --------------------
-    // DESKTOP (WHEEL)
+    // DESKTOP / TRACKPAD
     // --------------------
     const onWheel = (e: WheelEvent) => {
-      e.preventDefault()
-      if (gestureLocked.current) return
+      // ignore zero / meaningless events
+      if (e.deltaY === 0) return
 
-      wheelDelta.current += e.deltaY
+      // accumulate to detect intent
+      wheelAccum.current += e.deltaY
 
-      if (Math.abs(wheelDelta.current) < INTENT_THRESHOLD) return
+      if (!gestureActive.current) {
+        if (Math.abs(wheelAccum.current) < INTENT_THRESHOLD) return
 
-      gestureLocked.current = true
-      const direction = wheelDelta.current > 0 ? 1 : -1
-      const target = index + direction
-
-      if (target >= 0 && target < timeline.length) {
-        setPrevIndex(index)
-        setIndex(target)
+        // INTENT CONFIRMED
+        gestureActive.current = true
+        changeScene(wheelAccum.current > 0 ? 1 : -1)
       }
 
-      wheelStopTimer.current = window.setTimeout(unlock, 60)
+      // reset gesture end timer
+      if (wheelTimeout.current) clearTimeout(wheelTimeout.current)
+      wheelTimeout.current = window.setTimeout(() => {
+        gestureActive.current = false
+        wheelAccum.current = 0
+      }, GESTURE_END_DELAY)
     }
 
     // --------------------
-    // MOBILE (TOUCH)
+    // MOBILE TOUCH
     // --------------------
     const onTouchStart = (e: TouchEvent) => {
       touchStartY.current = e.touches[0].clientY
     }
 
-    const onTouchMove = (e: TouchEvent) => {
-      touchEndY.current = e.touches[0].clientY
+    const onTouchEnd = (e: TouchEvent) => {
+      const endY = e.changedTouches[0].clientY
+      const delta = touchStartY.current - endY
+
+      if (Math.abs(delta) < 60) return // ignore tap / jitter
+
+      changeScene(delta > 0 ? 1 : -1)
     }
 
-    const onTouchEnd = () => {
-      if (gestureLocked.current) return
-
-      const deltaY = touchStartY.current - touchEndY.current
-
-      if (Math.abs(deltaY) < TOUCH_THRESHOLD) return
-
-      gestureLocked.current = true
-      const direction = deltaY > 0 ? 1 : -1
-      const target = index + direction
-
-      if (target >= 0 && target < timeline.length) {
-        setPrevIndex(index)
-        setIndex(target)
-      }
-
-      setTimeout(unlock, 80)
-    }
-
-    // listeners
-    window.addEventListener("wheel", onWheel, { passive: false })
+    window.addEventListener("wheel", onWheel, { passive: true })
     window.addEventListener("touchstart", onTouchStart, { passive: true })
-    window.addEventListener("touchmove", onTouchMove, { passive: true })
-    window.addEventListener("touchend", onTouchEnd)
+    window.addEventListener("touchend", onTouchEnd, { passive: true })
 
     return () => {
       window.removeEventListener("wheel", onWheel)
       window.removeEventListener("touchstart", onTouchStart)
-      window.removeEventListener("touchmove", onTouchMove)
       window.removeEventListener("touchend", onTouchEnd)
-      if (wheelStopTimer.current) clearTimeout(wheelStopTimer.current)
+      if (wheelTimeout.current) clearTimeout(wheelTimeout.current)
     }
   }, [index])
 
   return (
-    <main className="relative overflow-hidden touch-none">
+    <main className="relative h-screen w-screen overflow-hidden">
       {prevIndex !== null && (
         <Scene
           key={timeline[prevIndex].id + "-prev"}
